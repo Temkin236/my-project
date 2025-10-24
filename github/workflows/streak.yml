@@ -1,0 +1,28 @@
+name: 🔥 Streak Keeper
+
+on:
+  schedule:
+    - cron: "0 10 * * *" # Runs every day at 10:00 UTC
+  workflow_dispatch:
+
+jobs:
+  keep-streak:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "temkin236"
+          git config --global user.email "temkin236@users.noreply.github.com"
+
+      - name: Update streak log
+        run: |
+          date=$(date)
+          echo "Commit from streak keeper at $date" >> streak_log.txt
+          git add streak_log.txt
+          git commit -m "🔥 Maintain streak - $date" || echo "No changes to commit"
+
+      - name: Push changes
+        run: git push
